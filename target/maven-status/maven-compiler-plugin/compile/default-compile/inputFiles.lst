@@ -1,0 +1,8 @@
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/repository/ItemRepository.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/model/Item.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/dto/ItemDTO.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/Application.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/exception/CustomExceptionHandler.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/controller/ItemController.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/utils/NotificationScheduler.java
+/home/bec/Desktop/Projeto_test_soft/re-minder/src/main/java/com/reminder/service/ItemService.java
