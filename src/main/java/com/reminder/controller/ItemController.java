@@ -23,8 +23,13 @@ public class ItemController {
         return itemService.saveItem(item);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Item> getAllItems() {
         return itemService.getAllItems();
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Item> getAllItemsFromUser(@PathVariable Long userId) {
+        return itemService.getItemsByUserId(userId);
     }
 }

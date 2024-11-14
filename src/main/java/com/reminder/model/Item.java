@@ -22,12 +22,16 @@ public class Item {
     private LocalDate dataUltimaTroca;
 
     @Column( name = "intervaloTrocaDias", columnDefinition = "INT", nullable = true )
-    private int intervaloTrocaDias; // Dias até a próxima troca
+    private Integer intervaloTrocaDias; // Dias até a próxima troca
 
     @Column( name = "dataProximaTroca", columnDefinition = "DATE", nullable = false )
     @Temporal( TemporalType.DATE )
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )
     private LocalDate dataProximaTroca;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
     public Long getId() {
         return id;
@@ -53,11 +57,11 @@ public class Item {
         this.dataUltimaTroca = dataUltimaTroca;
     }
 
-    public int getIntervaloTrocaDias() {
+    public Integer getIntervaloTrocaDias() {
         return intervaloTrocaDias;
     }
 
-    public void setIntervaloTrocaDias(int intervaloTrocaDias) {
+    public void setIntervaloTrocaDias(Integer intervaloTrocaDias) {
         this.intervaloTrocaDias = intervaloTrocaDias;
     }
 

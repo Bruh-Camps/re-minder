@@ -24,5 +24,9 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> getItemsByUserId(Long userId) {
+        return itemRepository.findByUserId(userId);
+    }
+
     // Outros métodos para atualizar e verificar lembretes
 }
