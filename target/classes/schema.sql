@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    proxima_troca DATE,
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
