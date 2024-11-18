@@ -1,36 +1,38 @@
 package com.reminder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table( name = "item" )
+@Table( name = "ITEMS" )
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
-    @Column( name = "nome", columnDefinition = "VARCHAR(100)", nullable = false )
-    private String nome;
+    @Column( name = "NAME", columnDefinition = "VARCHAR(100)", nullable = false )
+    private String name;
 
-    @Column( name = "dataUltimaTroca", columnDefinition = "DATE", nullable = false )
+    @Column( name = "DATE_LAST_CHANGE", columnDefinition = "DATE", nullable = false )
     @Temporal( TemporalType.DATE )
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )
-    private LocalDate dataUltimaTroca;
+    private LocalDate dateLastChange;
 
-    @Column( name = "intervaloTrocaDias", columnDefinition = "INT", nullable = true )
-    private Integer intervaloTrocaDias; // Dias até a próxima troca
+    @Column( name = "CHANGE_DAYS_INTERVAL", columnDefinition = "INT", nullable = true )
+    private Integer changeDaysInterval; // Dias até a próxima troca
 
-    @Column( name = "dataProximaTroca", columnDefinition = "DATE", nullable = false )
+    @Column( name = "DATE_NEXT_CHANGE", columnDefinition = "DATE", nullable = false )
     @Temporal( TemporalType.DATE )
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )
-    private LocalDate dataProximaTroca;
+    private LocalDate dateNextChange;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
+    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_ID")
+    @JsonBackReference
     private User user;
 
     public Long getId() {
@@ -41,35 +43,43 @@ public class Item {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public LocalDate getDataUltimaTroca() {
-        return dataUltimaTroca;
+    public LocalDate getDateLastChange() {
+        return dateLastChange;
     }
 
-    public void setDataUltimaTroca(LocalDate dataUltimaTroca) {
-        this.dataUltimaTroca = dataUltimaTroca;
+    public void setDateLastChange(LocalDate dateLastChange) {
+        this.dateLastChange = dateLastChange;
     }
 
-    public Integer getIntervaloTrocaDias() {
-        return intervaloTrocaDias;
+    public Integer getChangeDaysInterval() {
+        return changeDaysInterval;
     }
 
-    public void setIntervaloTrocaDias(Integer intervaloTrocaDias) {
-        this.intervaloTrocaDias = intervaloTrocaDias;
+    public void setChangeDaysInterval(Integer changeDaysInterval) {
+        this.changeDaysInterval = changeDaysInterval;
     }
 
-    public LocalDate getDataProximaTroca() {
-        return dataProximaTroca;
+    public LocalDate getDateNextChange() {
+        return dateNextChange;
     }
 
-    public void setDataProximaTroca(LocalDate dataProximaTroca) {
-        this.dataProximaTroca = dataProximaTroca;
+    public void setDateNextChange(LocalDate dateNextChange) {
+        this.dateNextChange = dateNextChange;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

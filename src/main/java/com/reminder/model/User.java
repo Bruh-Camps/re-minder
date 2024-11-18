@@ -1,30 +1,40 @@
 package com.reminder.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "nome", nullable = false)
-    private String nome;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "EMAIL", nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Item> items;
 
-    @Column(unique = true, nullable = false)
-    private String usuario;
+    @Column(name = "LOGIN", unique = true, nullable = false)
+    private String login;
 
-    @Column(nullable = false)
-    private String senha;
+    @Column(name = "USER_PASS", nullable = false)
+    private String user_pass;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLES",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -34,12 +44,12 @@ public class User {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -58,19 +68,27 @@ public class User {
         this.items = items;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getUsername() {
+        return login;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUsername(String login) {
+        this.login = login;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getUser_pass() {
+        return user_pass;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setUser_pass(String user_pass) {
+        this.user_pass = user_pass;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -28,7 +28,7 @@ public class NotificationScheduler {
         List<Item> items = itemService.getAllItems();  // Obtemos todos os itens registrados
 
         for (Item item : items) {
-            if (item.getDataProximaTroca().isEqual(LocalDate.now())) {
+            if (item.getDateNextChange().isEqual(LocalDate.now())) {
                 sendNotificationEmail(item);
             }
         }
@@ -37,8 +37,8 @@ public class NotificationScheduler {
     private void sendNotificationEmail(Item item) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo("usuario@exemplo.com"); // Aqui você usaria o e-mail do usuário
-        message.setSubject("Lembrete: Troca de " + item.getNome());
-        message.setText("Olá! Lembre-se de trocar o item: " + item.getNome() + ". A troca é recomendada para hoje.");
+        message.setSubject("Lembrete: Troca de " + item.getName());
+        message.setText("Olá! Lembre-se de trocar o item: " + item.getName() + ". A troca é recomendada para hoje.");
 
         /*
         * Nota: Substitua seu-email@gmail.com e sua-senha pelas credenciais reais.
