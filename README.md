@@ -7,8 +7,8 @@ http://localhost:8080/{endpoint}
 
 Como registrar usuário:
 
-'''curl
-    curl -i -X POST \
+``` curl
+curl -i -X POST \
     -H "Content-Type:application/json" \
     -d \
     '{
@@ -18,17 +18,17 @@ Como registrar usuário:
     "password": "1234test"
     }' \
     'http://localhost:8080/api/auth/signup'
-'''
+```
 
 Como logar com o usuário:
 
-'''curl
+``` curl
 curl -i -X POST \
--H "Content-Type:application/json" \
--d \
-'{
-"usernameOrEmail": "test",
-"password": "1234test"
-}' \
-'http://localhost:8080/api/auth/signin'
-'''
+    -H "Content-Type:application/json" \
+    -d \
+    '{
+    "usernameOrEmail": "test",
+    "password": "1234test"
+    }' \
+    'http://localhost:8080/api/auth/signin'
+``` 
