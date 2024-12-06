@@ -1,8 +1,7 @@
 package com.reminder.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,24 +16,25 @@ public class User {
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "USERNAME", nullable = false)
+    private String username;
+
+    @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Item> items;
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
 
-    @Column(name = "LOGIN", unique = true, nullable = false)
-    private String login;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_ROLES",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
+    )
+    private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "USER_PASS", nullable = false)
-    private String user_pass;
+    // Getters e Setters
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLES",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -52,6 +52,14 @@ public class User {
         this.name = name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -60,28 +68,12 @@ public class User {
         this.email = email;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public String getPassword() {
+        return password;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public String getUsername() {
-        return login;
-    }
-
-    public void setUsername(String login) {
-        this.login = login;
-    }
-
-    public String getUser_pass() {
-        return user_pass;
-    }
-
-    public void setUser_pass(String user_pass) {
-        this.user_pass = user_pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Role> getRoles() {

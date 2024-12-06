@@ -1,4 +1,4 @@
-package com.reminder.payload;
+package com.reminder.dto;
 
 import java.util.Objects;
 

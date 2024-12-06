@@ -1,9 +1,11 @@
 package com.reminder.controller;
 
+import com.reminder.dto.JwtAuthResponse;
+import com.reminder.security.JwtTokenProvider;
 import com.reminder.model.Role;
 import com.reminder.model.User;
-import com.reminder.payload.LoginDto;
-import com.reminder.payload.SignUpDto;
+import com.reminder.dto.LoginDto;
+import com.reminder.dto.SignUpDto;
 import com.reminder.repository.RoleRepository;
 import com.reminder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,14 @@ import java.util.Collections;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Autowired
-    private AuthenticationManager authenticationManager;
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -38,19 +46,31 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginDto loginDto) {
+        // Authenticate the user
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsernameOrEmail(),
+                        loginDto.getPassword()
+                )
+        );
 
+        // Set the authentication context
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+
+        // Generate JWT Token
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        // Return the token
+        return ResponseEntity.ok(new JwtAuthResponse(token));
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
 
         // add check for username exists in a DB
-        if(userRepository.existsByLogin(signUpDto.getUsername())){
+        if(userRepository.existsByUsername(signUpDto.getUsername())){
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
 
@@ -68,7 +88,7 @@ public class AuthController {
         user.setName(signUpDto.getName());
         user.setUsername(signUpDto.getUsername());
         user.setEmail(signUpDto.getEmail());
-        user.setUser_pass(passwordEncoder.encode(signUpDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
 
         Role roles = roleRepository.findByName("NORMAL_USER").get();
         user.setRoles(Collections.singleton(roles));
