@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -22,8 +23,14 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
+        // Extrair roles do authentication
+        String roles = authentication.getAuthorities().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+
         return Jwts.builder()
                 .setSubject(username)
+                .claim("roles", roles) // Adiciona roles ao token
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

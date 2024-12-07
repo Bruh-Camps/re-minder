@@ -18,5 +18,5 @@ INSERT INTO ITEMS (NAME, DATE_LAST_CHANGE, DATE_NEXT_CHANGE, USER_ID) VALUES
     ('Óleo de Motor', '2024-12-01', '2024-12-01', -1),
     ('Escova de dentes', '2024-12-01', '2024-12-01', -2),
     ('Travesseiro', '2024-12-01', '2024-12-01', -1),
-    ('Vela do filtro de água', '2024-12-30', '2024-12-31', 1);
+    ('Vela do filtro de água', '2024-12-30', '2024-12-31', null);
 

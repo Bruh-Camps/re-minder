@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 @Entity
@@ -14,17 +18,21 @@ public class Item {
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
+    @NotNull(message = "Name is required")
     @Column( name = "NAME", columnDefinition = "VARCHAR(100)", nullable = false )
     private String name;
 
+    @NotNull(message = "Date of last change is required")
     @Column( name = "DATE_LAST_CHANGE", columnDefinition = "DATE", nullable = false )
     @Temporal( TemporalType.DATE )
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )
     private LocalDate dateLastChange;
 
+    @Positive(message = "Change days interval must be a positive number")
     @Column( name = "CHANGE_DAYS_INTERVAL", columnDefinition = "INT", nullable = true )
     private Integer changeDaysInterval; // Dias até a próxima troca
 
+    //@Null(message = "Date of next change is calculated automatically based on chande days interval.")
     @Column( name = "DATE_NEXT_CHANGE", columnDefinition = "DATE", nullable = false )
     @Temporal( TemporalType.DATE )
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )

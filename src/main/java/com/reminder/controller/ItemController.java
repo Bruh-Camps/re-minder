@@ -1,10 +1,13 @@
 package com.reminder.controller;
 
+import com.reminder.dto.ItemDto;
 import com.reminder.model.Item;
 import com.reminder.model.User;
 import com.reminder.service.ItemService;
 import com.reminder.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,25 +28,16 @@ public class ItemController {
         this.userService = userService;
     }
 
-    //TODO: Implementar salvamento de items
-    @PostMapping
-    public Item createItem(@RequestBody Item item) {
-        return itemService.saveItem(item);
+    @PostMapping("/item")
+    public ResponseEntity<?> createUserItem(@Valid @RequestBody ItemDto itemDto) {
+        User user = userService.getCurrentUser();
+        Item savedItem = itemService.saveItem(itemDto, user);
+        return ResponseEntity.ok(savedItem);
     }
 
     @GetMapping("/items")
     public List<Item> getAllItemsForAuthenticatedUser() {
-        // Obtém o usuário autenticado
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName();
-
-        // Busca o usuário no banco
-        Optional<User> user = userService.findByUsername(login);
-        if (user.isEmpty() || login.equals("anonymousUser")) {
-            throw new RuntimeException("Usuário não encontrado");
-        }
-
-        // Retorna os itens do usuário autenticado
-        return itemService.getItemsByUserId(user.get().getId());
+        User user = userService.getCurrentUser();
+        return itemService.getItemsByUser(user);
     }
 }

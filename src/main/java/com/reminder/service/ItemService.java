@@ -1,7 +1,11 @@
 package com.reminder.service;
 
+import com.reminder.dto.ItemDto;
 import com.reminder.model.Item;
+import com.reminder.model.User;
 import com.reminder.repository.ItemRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +19,21 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public Item saveItem(Item item) {
-        item.setDateNextChange(item.getDateLastChange().plusDays(item.getChangeDaysInterval()));
+    public Item saveItem(ItemDto itemDto, User user) {
+        // Converte DTO para entidade
+        Item item = new Item();
+        item.setName(itemDto.getName());
+        item.setDateLastChange(itemDto.getDateLastChange());
+        item.setChangeDaysInterval(itemDto.getChangeDaysInterval());
+        item.setUser(user);
+
+        // Calcula dateNextChange com base em dateLastChange e changeDaysInterval
+        if (item.getDateLastChange() != null && item.getChangeDaysInterval() != null) {
+            item.setDateNextChange(item.getDateLastChange().plusDays(item.getChangeDaysInterval()));
+        } else {
+            throw new IllegalArgumentException("dateLastChange and changeDaysInterval are required");
+        }
+
         return itemRepository.save(item);
     }
 
@@ -24,9 +41,8 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public List<Item> getItemsByUserId(Long userId) {
-        return itemRepository.findByUserId(userId);
+    public List<Item> getItemsByUser(User user) {
+        return itemRepository.findByUserId(user.getId());
     }
 
-    // Outros métodos para atualizar e verificar lembretes
 }

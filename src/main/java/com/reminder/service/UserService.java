@@ -3,6 +3,8 @@ package com.reminder.service;
 import com.reminder.model.User;
 import com.reminder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,5 +23,18 @@ public class UserService {
         return userRepository.findByUsername(login);
     }
 
-    // Outros métodos para salvar, atualizar e deletar usuários
+    public User getCurrentUser() {
+        // Obtém o usuário autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+
+        // Busca o usuário no banco
+        Optional<User> user = this.findByUsername(login);
+        if (user.isEmpty() || login.equals("anonymousUser")) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        return user.get();
+    }
+
 }
