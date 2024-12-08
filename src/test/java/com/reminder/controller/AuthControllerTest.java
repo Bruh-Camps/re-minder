@@ -1,5 +1,5 @@
 package com.reminder.controller;
 
-public class ItemControllerTest {
+public class AuthControllerTest {
     //TODO
 }

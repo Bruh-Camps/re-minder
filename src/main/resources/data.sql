@@ -6,7 +6,7 @@ INSERT INTO USERS (ID, NAME, EMAIL, USERNAME, PASSWORD) VALUES
     (-1, 'admin', 'admin@example.com', 'admin', 'admin'),
     (-2, 'Maria Oliveira', 'maria.oliveira@example.com', 'user2', 'pass123'),
     (-3, 'Carlos Pereira', 'carlos.pereira@example.com', 'user3', 'pass123'),
-    (-4, 'Ana Costa', 'ana.costa@example.com', 'user4', 'pass123');
+    (-4, 'testuser', 'testuser@example.com', 'testuser', 'testpassword');
 
 INSERT INTO USER_ROLES (USER_ID, ROLE_ID) VALUES
     (-1, 1),

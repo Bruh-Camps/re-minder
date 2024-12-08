@@ -26,12 +26,16 @@ public class UserService {
     public User getCurrentUser() {
         // Obtém o usuário autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         String login = authentication.getName();
+        if(login.equals("anonymousUser")){
+            throw new RuntimeException("Usuário não autenticado.");
+        }
 
         // Busca o usuário no banco
         Optional<User> user = this.findByUsername(login);
-        if (user.isEmpty() || login.equals("anonymousUser")) {
-            throw new RuntimeException("Usuário não encontrado");
+        if (user.isEmpty()) {
+            throw new RuntimeException("Usuário não encontrado no banco de dados.");
         }
 
         return user.get();
