@@ -1,0 +1,75 @@
+name: Maven Testing
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ubuntu-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ubuntu-maven-
+
+      - name: Run Maven Tests
+        run: mvn clean test
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: macos-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            macos-maven-
+
+      - name: Run Maven Tests
+        run: mvn clean test
+
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: windows-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            windows-maven-
+
+      - name: Run Maven Tests
+        run: mvn clean test
