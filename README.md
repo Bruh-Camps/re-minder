@@ -1,5 +1,12 @@
-Projeto de backend para uma aplicação responsável por enviar lembretes para que os usuários realizem a troca de itens pessoais.
+# Trabalho Prático - Engenharia de Software II
 
+### Integrantes
+- Antônio Isaac Silva Lima
+- Bruno Esteves Campoi
+- Marcelo Lommez Rodrigues de Jesus
+<hr></hr>
+Projeto de backend para uma aplicação responsável por enviar lembretes para que os usuários realizem a troca de itens pessoais.
+<br></br>
 Após lançar a aplicação Spring Boot:
 
 1. Para acessar o banco de dados H2: http://localhost:8080/h2-console/login.jsp
