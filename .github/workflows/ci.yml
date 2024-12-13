@@ -28,6 +28,11 @@ jobs:
       - name: Run Maven Tests
         run: mvn clean test
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
+
   test-macos:
     runs-on: macos-latest
     steps:
@@ -51,6 +56,11 @@ jobs:
       - name: Run Maven Tests
         run: mvn clean test
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
+
   test-windows:
     runs-on: windows-latest
     steps:
@@ -73,3 +83,8 @@ jobs:
 
       - name: Run Maven Tests
         run: mvn clean test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
