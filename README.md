@@ -1,12 +1,10 @@
 # Trabalho Prático - Engenharia de Software II
-
 ## Membros do grupo
 - Antônio Isaac Silva Lima (Eng. Software 2)
 - Bruno Esteves Campoi (Eng. Software 2  |  Teste de Software)
 - Marcelo Lommez Rodrigues de Jesus (Eng. Software 2)
 
 ---
-
 ## Explicação do Sistema
 
 Diversos itens utilizados no dia-a-dia possuem recomendações de troca com certa frequência, definidas por especialistas das mais diversas áreas. Entretanto, diante do grande número de objetos, torna-se difícil o gerenciamento de todas essas trocas dentro do prazo adequado, já que para isso é necessário decorar datas e prazos para cada objeto. Alguns exemplos comuns são:
@@ -26,7 +24,6 @@ Pensando nesse problema, o sistema proposto busca ajudar o usuário a se lembrar
 Resumo:  Projeto de backend de uma aplicação responsável por enviar lembretes para que os usuários realizem a troca de itens pessoais.
 
 ---
-
 ## Explicação das tecnologias Utilizadas
 
 Para o desenvolvimento deste projeto, foi utilizada a linguagem Java na versão 17, em conjunto com o framework Spring Boot, ideal para a construção de APIs REST devido à sua simplicidade e robustez. Como sistema de gerenciamento de banco de dados (SGBD), optou-se pelo H2, uma solução leve e embutida, que atende perfeitamente aos objetivos do projeto. Para gerenciar a persistência de dados e realizar o mapeamento objeto-relacional (ORM), foi empregado o framework Jakarta Persistence, garantindo uma integração eficiente entre a aplicação e o banco de dados.
@@ -47,7 +44,7 @@ Os endpoints estarão disponíveis no seguinte formato de URL:
 - Endpoints de usuários comuns: http://localhost:8080/api/user/{endpoint}
 
 
-Exemplo de requisição para registrar usário:
+Exemplo de requisição para registrar usuário:
 
 ``` curl
 curl -i -X POST \
