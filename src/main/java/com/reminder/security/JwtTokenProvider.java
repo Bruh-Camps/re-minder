@@ -17,6 +17,22 @@ public class JwtTokenProvider {
     @Value("${app.jwt.expiration}")
     private int jwtExpirationMs;
 
+    public void setJwtSecret(String jwtSecret) {
+        this.jwtSecret = jwtSecret;
+    }
+
+    public void setJwtExpirationMs(int jwtExpirationMs) {
+        this.jwtExpirationMs = jwtExpirationMs;
+    }
+
+    public String getJwtSecret() {
+        return jwtSecret;
+    }
+
+    public int getJwtExpirationMs() {
+        return jwtExpirationMs;
+    }
+
     // Generate JWT token
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
