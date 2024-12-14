@@ -73,6 +73,21 @@ class ItemDtoTest {
     }
 
     @Test
+    void testEqualsNotTrue() {
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setName("Test Item");
+        itemDto1.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto1.setChangeDaysInterval(30);
+
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setName("Test different Item");
+        itemDto2.setDateLastChange(LocalDate.of(2024, 12, 14));
+        itemDto2.setChangeDaysInterval(20);
+
+        assertNotEquals(itemDto1, itemDto2);
+    }
+
+    @Test
     void testHashCode() {
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setName("Test Item");

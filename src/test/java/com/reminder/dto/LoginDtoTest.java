@@ -56,6 +56,32 @@ class LoginDtoTest {
     }
 
     @Test
+    void testEqualsDifferentEmailsButSamePassword() {
+        LoginDto loginDto1 = new LoginDto();
+        loginDto1.setUsernameOrEmail("user1@example.com");
+        loginDto1.setPassword("password123");
+
+        LoginDto loginDto2 = new LoginDto();
+        loginDto2.setUsernameOrEmail("user2@example.com");
+        loginDto2.setPassword("password123");
+
+        assertNotEquals(loginDto1, loginDto2);
+    }
+
+    @Test
+    void testEqualsDifferentPasswordsButSameEmail() {
+        LoginDto loginDto1 = new LoginDto();
+        loginDto1.setUsernameOrEmail("user1@example.com");
+        loginDto1.setPassword("password123");
+
+        LoginDto loginDto2 = new LoginDto();
+        loginDto2.setUsernameOrEmail("user1@example.com");
+        loginDto2.setPassword("password456");
+
+        assertNotEquals(loginDto1, loginDto2);
+    }
+
+    @Test
     void testEqualsWithNull() {
         LoginDto loginDto = new LoginDto();
         loginDto.setUsernameOrEmail("user@example.com");

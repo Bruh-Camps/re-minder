@@ -44,6 +44,23 @@ class SignUpDtoTest {
     }
 
     @Test
+    void testEqualsNotTrue() {
+        SignUpDto signUpDto1 = new SignUpDto();
+        signUpDto1.setName("John Doe");
+        signUpDto1.setUsername("johndoe");
+        signUpDto1.setEmail("john.doe@example.com");
+        signUpDto1.setPassword("password123");
+
+        SignUpDto signUpDto2 = new SignUpDto();
+        signUpDto2.setName("John Marcus");
+        signUpDto2.setUsername("johnmarc");
+        signUpDto2.setEmail("john.marc@example.com");
+        signUpDto2.setPassword("password456");
+
+        assertNotEquals(signUpDto1, signUpDto2);
+    }
+
+    @Test
     void testEqualsNullObject() {
         SignUpDto signUpDto = new SignUpDto();
         assertNotEquals(null, signUpDto);
