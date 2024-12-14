@@ -1,18 +1,18 @@
-package com.reminder.utils;
+package com.reminder.notification;
 
 import com.reminder.model.Item;
 import com.reminder.service.ItemService;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Component
-@EnableScheduling  // Habilita o agendamento de tarefas
+@EnableScheduling
 public class NotificationScheduler {
 
     private final ItemService itemService;
@@ -34,18 +34,18 @@ public class NotificationScheduler {
         }
     }
 
-    private void sendNotificationEmail(Item item) {
+    protected void sendNotificationEmail(Item item) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("usuario@exemplo.com"); // Aqui você usaria o e-mail do usuário
-        message.setSubject("Lembrete: Troca de " + item.getName());
-        message.setText("Olá! Lembre-se de trocar o item: " + item.getName() + ". A troca é recomendada para hoje.");
 
-        /*
-        * Nota: Substitua seu-email@gmail.com e sua-senha pelas credenciais reais.
-        * Caso você esteja usando o Gmail, talvez seja necessário permitir o acesso
-        * a aplicativos menos seguros ou gerar uma senha de aplicativo.
-        * */
+        // Aqui usamos o e-mail do usuário associado ao item
+        String userEmail = item.getUser().getEmail();  // Presumindo que 'getUser()' retorne o usuário associado ao item
 
-        mailSender.send(message);
+        if (userEmail != null && !userEmail.isEmpty()) {
+            message.setTo(userEmail);
+            message.setSubject("Lembrete: Troca de " + item.getName());
+            message.setText("Olá! Lembre-se de trocar o item: " + item.getName() + ". A troca é recomendada para hoje.");
+
+            mailSender.send(message);
+        }
     }
 }
