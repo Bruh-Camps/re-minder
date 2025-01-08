@@ -25,6 +25,12 @@ jobs:
           restore-keys: |
             ubuntu-maven-
 
+      - name: Build application
+        run: mvn clean package -DfinalName=re-minder -DoutputDirectory=target/
+
+      - name: List build artifacts
+        run: ls -R target
+
       - name: Start application
         run: |
           nohup java -jar target/re-minder.jar & 
