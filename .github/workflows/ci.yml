@@ -70,6 +70,24 @@ jobs:
           key: macos-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             macos-maven-
+            
+            - name: Build application
+        run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
+
+      - name: List build artifacts
+        run: ls -R target
+
+      - name: Start application
+        run: |
+          nohup java -jar target/re-minder.jar & 
+          for i in {1..30}; do # Wait for up to 30 seconds
+            if curl -s http://localhost:8080/api/auth/health; then
+              echo "Application is running"
+              break
+            fi
+            echo "Waiting for application to start..."
+            sleep 1
+          done
 
       - name: Run Maven Tests
         run: mvn clean test
@@ -98,6 +116,25 @@ jobs:
           key: windows-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             windows-maven-
+            
+            - name: Build application
+        run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
+
+      - name: List build artifacts
+        run: dir target # Use `dir` command for Windows
+
+      - name: Start application
+        run: |
+          start /b java -jar target/re-minder.jar
+          for /l %%i in (1,1,30) do (
+            curl -s http://localhost:8080/api/auth/health && (
+              echo Application is running
+              exit /b 0
+            )
+            echo Waiting for application to start...
+            timeout /t 1 > nul
+          )
+          exit /b 1
 
       - name: Run Maven Tests
         run: mvn clean test
