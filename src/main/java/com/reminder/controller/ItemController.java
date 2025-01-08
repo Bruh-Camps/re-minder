@@ -7,6 +7,7 @@ import com.reminder.service.ItemService;
 import com.reminder.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +33,7 @@ public class ItemController {
     public ResponseEntity<?> createUserItem(@Valid @RequestBody ItemDto itemDto) {
         User user = userService.getCurrentUser();
         Item savedItem = itemService.saveItem(itemDto, user);
-        return ResponseEntity.ok(savedItem);
+        return new ResponseEntity<>("Item saved successfully", HttpStatus.OK);
     }
 
     @GetMapping("/items")

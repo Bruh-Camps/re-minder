@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String username = jwtTokenProvider.getUsernameFromToken(token);
 
-            // Verifica se o token utilizado está associado ao usuário atual
+            // Retorna caso o token utilizado não estiver associado ao usuário atual
             if (!jwtTokenBlacklistService.isTokenInMap(username, token)){
                 SecurityContextHolder.setContext(null);
                 return;

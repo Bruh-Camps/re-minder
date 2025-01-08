@@ -28,6 +28,9 @@ class JwtTokenProviderTest {
     private JwtTokenProvider jwtTokenProvider;
 
     @Mock
+    private JwtTokenBlacklistService jwtTokenBlacklistService;
+
+    @Mock
     private Authentication authentication;
 
     String JWTVALIDSECRET = "testetestetestetestetestetestetestetesteteste" +
@@ -38,7 +41,7 @@ class JwtTokenProviderTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        jwtTokenProvider = new JwtTokenProvider();
+        jwtTokenProvider = new JwtTokenProvider(jwtTokenBlacklistService);
         jwtTokenProvider.setJwtSecret(JWTVALIDSECRET);
         jwtTokenProvider.setJwtExpirationMs(1000 * 60 * 60); // 1 hora
     }

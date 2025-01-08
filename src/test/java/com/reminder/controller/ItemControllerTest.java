@@ -65,7 +65,7 @@ class ItemControllerTest {
         // Assert
         assertNotNull(response);
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals(savedItem, response.getBody());
+        assertEquals("Item saved successfully", response.getBody());
         verify(userService, times(1)).getCurrentUser();
         verify(itemService, times(1)).saveItem(itemDto, user);
     }
