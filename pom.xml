@@ -21,6 +21,11 @@
         <java.version>17</java.version> <!-- Certifique-se de que o Java 17 está instalado -->
     </properties>
 
+    <build>
+        <finalName>re-minder</finalName> <!-- The desired name of the JAR -->
+        <!--<directory>${project.basedir}/output</directory>  The desired location -->
+    </build>
+
     <dependencies>
         <!-- Spring Boot Web Starter para criar APIs RESTful -->
         <dependency>
