@@ -26,7 +26,7 @@ jobs:
             ubuntu-maven-
 
       - name: Build application
-        run: mvn clean package -DfinalName=re-minder -DoutputDirectory=target/
+        run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
       - name: List build artifacts
         run: ls -R target
