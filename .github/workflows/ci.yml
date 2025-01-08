@@ -25,6 +25,13 @@ jobs:
           restore-keys: |
             ubuntu-maven-
 
+      - name: Build application
+        run: mvn clean package
+            
+      - name: Start application
+        run: java -jar target/re-minder.jar &
+              sleep 5
+
       - name: Run Maven Tests
         run: mvn clean test
 
