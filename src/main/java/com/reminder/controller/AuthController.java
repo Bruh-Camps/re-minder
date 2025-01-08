@@ -42,6 +42,11 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("health")
+    public ResponseEntity<?> health(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginDto loginDto) {
         // Authenticate the user
