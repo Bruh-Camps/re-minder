@@ -126,7 +126,7 @@ jobs:
       - name: Start application
         run: |
           Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar"
-          $maxAttempts = 30
+          $maxAttempts = 60
           $attempt = 0
           while ($attempt -lt $maxAttempts) {
             try {
