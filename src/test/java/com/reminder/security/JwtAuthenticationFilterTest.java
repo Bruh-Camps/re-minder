@@ -31,6 +31,9 @@ class JwtAuthenticationFilterTest {
     private UserDetailsService userDetailsService;
 
     @Mock
+    private JwtTokenBlacklistService jwtTokenBlacklistService;
+
+    @Mock
     private HttpServletRequest request;
 
     @Mock
@@ -46,7 +49,7 @@ class JwtAuthenticationFilterTest {
     void setUp() {
         SecurityContextHolder.clearContext();
         MockitoAnnotations.openMocks(this);
-        jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService);
+        jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService, jwtTokenBlacklistService);
     }
 
     @AfterEach

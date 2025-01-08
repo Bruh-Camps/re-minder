@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -16,6 +17,12 @@ public class JwtTokenProvider {
 
     @Value("${app.jwt.expiration}")
     private int jwtExpirationMs;
+
+    private final JwtTokenBlacklistService jwtTokenBlacklistService;
+
+    public JwtTokenProvider(JwtTokenBlacklistService jwtTokenBlacklistService) {
+        this.jwtTokenBlacklistService = jwtTokenBlacklistService;
+    }
 
     public void setJwtSecret(String jwtSecret) {
         this.jwtSecret = jwtSecret;
@@ -44,13 +51,20 @@ public class JwtTokenProvider {
                 .map(Object::toString)
                 .collect(Collectors.joining(","));
 
-        return Jwts.builder()
+        String tokenId = UUID.randomUUID().toString(); // Gera um identificador único para cada token
+
+        String token = Jwts.builder()
                 .setSubject(username)
+                .claim("tokenId", tokenId)
                 .claim("roles", roles) // Adiciona roles ao token
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+
+        jwtTokenBlacklistService.saveTokenForUser(username, token); // Vincula o token ao usuário
+
+        return token;
     }
 
     // Validate JWT token

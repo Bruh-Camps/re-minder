@@ -38,7 +38,7 @@ public class Item {
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )
     private LocalDate dateNextChange;
 
-    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
     @JsonBackReference
     private User user;

@@ -22,7 +22,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Unauthorized");
-        errorResponse.put("message", "Usuário não está autenticado. Faça login para acessar este recurso.");
+        errorResponse.put("message", "User is not authenticated. Please log in to access this resource.");
 
         response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(errorResponse));
     }

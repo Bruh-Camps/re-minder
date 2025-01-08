@@ -1,7 +1,11 @@
 package com.reminder.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,7 +20,7 @@ public class User {
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "USERNAME", nullable = false, unique = true)
     private String username;
 
     @Column(name = "EMAIL", nullable = false, unique = true)
@@ -33,8 +37,11 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    // Getters e Setters
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Item> items = new ArrayList<>();
 
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -52,9 +59,7 @@ public class User {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() {return username;}
 
     public void setUsername(String username) {
         this.username = username;
@@ -83,4 +88,8 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public List<Item> getItems() {return items;}
+
+    public void setItems(List<Item> items) {}
 }
