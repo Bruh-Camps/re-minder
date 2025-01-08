@@ -71,7 +71,7 @@ jobs:
           restore-keys: |
             macos-maven-
             
-            - name: Build application
+      - name: Build application
         run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
       - name: List build artifacts
@@ -117,7 +117,7 @@ jobs:
           restore-keys: |
             windows-maven-
             
-            - name: Build application
+      - name: Build application
         run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
       - name: List build artifacts
