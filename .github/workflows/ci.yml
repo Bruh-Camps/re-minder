@@ -53,17 +53,17 @@ jobs:
       - name: Stop application
         run: pkill -f "re-minder.jar" || echo "Application already stopped"
 
-      - name: Debug Jacoco exec file
-        run: ls -l target
+      - name: Merge Jacoco coverage
+        run: |
+          mvn jacoco:merge \
+            -Djacoco.destfile=target/jacoco-merged.exec \
+            -Djacoco.fileSets[0].directory=target \
+            -Djacoco.fileSets[0].includes=jacoco.exec \
+            -Djacoco.fileSets[1].directory=target \
+            -Djacoco.fileSets[1].includes=jacoco-it.exec
 
-      #- name: Merge Jacoco coverage
-      #  run: mvn jacoco:merge -Djacoco.destfile=target/jacoco-merged.exec -X
-
-      #- name: Generate Jacoco report
-      #  run: mvn jacoco:report -Djacoco.dataFile=target/jacoco-merged.exec
-
-      - name: Generate Coverage Report
-        run: mvn verify
+      - name: Generate Jacoco Report
+        run: mvn jacoco:report -Djacoco.dataFile=target/jacoco-merged.exec
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
