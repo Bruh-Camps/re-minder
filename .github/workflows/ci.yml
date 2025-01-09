@@ -163,8 +163,7 @@ jobs:
               exit 1
             }
           } catch {
-            Write-Host "Application is not running or endpoint is unreachable."
-      #      exit 1
+            Write-Host "Application is not running or endpoint is unreachable." 
           }
 
       - name: Run Maven Tests
