@@ -57,7 +57,7 @@ jobs:
         run: ls -l target
 
       - name: Merge Jacoco coverage
-        run: mvn jacoco:merge -Djacoco.destfile=target/jacoco-merged.exec -Djacoco.filesets=target/jacoco-it.exec
+        run: mvn jacoco:merge -Djacoco.destfile=target/jacoco-merged.exec -Djacoco.filesets=target/jacoco-it.exec -X
 
       - name: Generate Jacoco report
         run: mvn jacoco:report -Djacoco.dataFile=target/jacoco-merged.exec
