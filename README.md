@@ -80,7 +80,7 @@ curl -i -X POST \
    -H "Authorization:Bearer <auth_token>" \
    -d \
 '{
-    "name": "Escova de dentes",
+  	"name": "Escova de dentes",
     "dateLastChange": "01/01/2024",
     "changeDaysInterval": 90
 }' \
@@ -96,6 +96,34 @@ curl -i -X GET \
  'http://localhost:8080/api/user/items'
 ```
 
+Exemplo de requisição para desautenticar um usuário:
+``` curl
+curl -i -X POST \
+   -H "Content-Type:application/json" \
+   -H "Authorization:Bearer <auth_token>" \
+   -d \
+'' \
+ 'http://localhost:8080/api/user/signout'
+``` 
+
+Exemplo de requisição para remover um usuário:
+``` curl
+curl -i -X DELETE \
+   -H "Content-Type:application/json" \
+   -H "Authorization:Bearer <auth_token>" \
+ 'http://localhost:8080/api/user/remove/{username}'
+``` 
+
+
+--- 
+
+## Testes de Sistema
+
+Os testes de sistema estão localizados em: `src/test/java/com/reminder/e2e`.
+
+Eles utilizam a biblioteca REST Assured, que facilita a automação de testes de APIs REST acessando-as por meio dos mesmos endpoints que o usuário da aplicação backend (geralmente uma aplicação frontend).
+
+
 --- 
 
 ## Próximos avanços
@@ -105,6 +133,7 @@ Lista completa de requisições implementadas e ainda a implementar:
 POST
 - OK - Cadastro de usuário:`api/auth/signup`
 - OK - Autenticação de usuário: `api/auth/signin`
+- OK - Desautentacação de usuário: `api/user/signout`
 - OK - Criação de item: `api/user/item`
 
 GET
@@ -113,9 +142,12 @@ GET
 
 PUT
 - Pendente - Altera número de dias para a troca de determinado item
+- Pendente - Altera data da última troca de determinado item
+- Pendente - Altera nome de determinado item
 
 DELETE
+- OK - Exclui determinado usuário: `user/remove/{username}`
 - Pendente - Exclui determinado item de um usuário
-- Pendente - Exclui determinado usuário
+
 
 ---
