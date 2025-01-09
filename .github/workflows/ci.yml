@@ -126,7 +126,7 @@ jobs:
       - name: Start application
         run: |
           Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar"
-          $maxAttempts = 60
+          $maxAttempts = 40
           $attempt = 0
           while ($attempt -lt $maxAttempts) {
             try {
@@ -146,6 +146,17 @@ jobs:
             exit 1
           }
 
+      - name: Test endpoint step
+        run: |
+          try {
+            $response = Invoke-WebRequest -Uri "http://localhost:8080/api/auth/health" -UseBasicParsing
+            if ($response.StatusCode -eq 200) {
+              Write-Host "Application is running"
+              break
+            }
+          } catch {
+            Write-Host "Waiting for application to start..."
+          }
 
       - name: Run Maven Tests
         run: mvn clean test
