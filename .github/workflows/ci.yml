@@ -31,7 +31,10 @@ jobs:
       - name: List build artifacts
         run: ls -R target
 
-      - name: Start application
+      - name: Download Jacoco Agent
+        run: curl -L https://repo1.maven.org/maven2/org/jacoco/org.jacoco.agent/0.8.10/org.jacoco.agent-0.8.10-runtime.jar -o jacocoagent.jar
+
+      - name: Start application with Jacoco
         run: |
           nohup java -javaagent:jacocoagent.jar=destfile=target/jacoco-it.exec -jar target/re-minder.jar &
 
