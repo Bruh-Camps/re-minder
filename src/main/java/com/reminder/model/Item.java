@@ -28,6 +28,7 @@ public class Item {
     @JsonFormat( pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo" )
     private LocalDate dateLastChange;
 
+    @NotNull(message = "Change days interval is required")
     @Positive(message = "Change days interval must be a positive number")
     @Column( name = "CHANGE_DAYS_INTERVAL", columnDefinition = "INT", nullable = true )
     private Integer changeDaysInterval; // Dias até a próxima troca

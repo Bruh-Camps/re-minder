@@ -13,7 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -31,6 +33,14 @@ public class ItemController {
 
     @PostMapping("/item")
     public ResponseEntity<?> createUserItem(@Valid @RequestBody ItemDto itemDto) {
+
+        if(itemDto.getChangeDaysInterval() < 1){
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", "Invalid data provided. Change interval must be positive.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+
         User user = userService.getCurrentUser();
         Item savedItem = itemService.saveItem(itemDto, user);
         return new ResponseEntity<>("Item saved successfully", HttpStatus.OK);
