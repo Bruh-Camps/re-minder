@@ -144,7 +144,7 @@ jobs:
         run: mvn test
 
       - name: List coverage reports
-        run: ls -R target/site
+        run: ls -R target/site/jacoco/
         shell: C:\cygwin\bin\bash.exe '{0}'
 
       - name: Upload coverage to Codecov
@@ -152,5 +152,6 @@ jobs:
         with:
           files: target/site/jacoco/jacoco.xml
           verbose: true
+        shell: pwsh
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
