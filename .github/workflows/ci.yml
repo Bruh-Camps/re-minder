@@ -127,7 +127,7 @@ jobs:
         shell: pwsh
         run: |
           Start-Job -ScriptBlock {
-            Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar" 
+            java -jar target/re-minder.jar -server.port=8080
           }
           
           $healthCheckUrl = "http://localhost:8080/api/auth/health"
@@ -150,25 +150,25 @@ jobs:
             exit 1
           }
 
-      #- name: Check application status
-      #  shell: pwsh
-      #  run: |
-      #    try {
-      #      $response = Invoke-WebRequest -Uri "http://localhost:8080/api/auth/health" -UseBasicParsing
-      #      if ($response.StatusCode -eq 200) {
-      #        Write-Host "Application is still running"
-      #        Write-Host "Response from endpoint: $($response.Content)"
-      #      } else {
-      #        Write-Host "Application returned unexpected status code: $($response.StatusCode)"
-      #        exit 1
-      #      }
-      #    } catch {
-      #      Write-Host "Application is not running or endpoint is unreachable."
+      - name: Check application status
+        shell: pwsh
+        run: |
+          try {
+            $response = Invoke-WebRequest -Uri "http://localhost:8080/api/auth/health" -UseBasicParsing
+            if ($response.StatusCode -eq 200) {
+              Write-Host "Application is still running"
+              Write-Host "Response from endpoint: $($response.Content)"
+            } else {
+              Write-Host "Application returned unexpected status code: $($response.StatusCode)"
+              exit 1
+            }
+          } catch {
+            Write-Host "Application is not running or endpoint is unreachable."
       #      exit 1
-      #    }
+          }
 
       - name: Run Maven Tests
-        run: mvn clean test
+        run: mvn test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
