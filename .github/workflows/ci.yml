@@ -150,5 +150,6 @@ jobs:
       - name: Upload coverage manually
         run: |
           curl -Os https://uploader.codecov.io/latest/windows/codecov.exe
-          ./codecov.exe -t ${{ secrets.CODECOV_ORG_TOKEN }} -f target/site/jacoco/jacoco.xml -v
+          codecov.exe -t ${{ secrets.CODECOV_ORG_TOKEN }} -f target/site/jacoco/jacoco.xml -v
         shell: cmd
+
