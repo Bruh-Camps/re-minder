@@ -127,7 +127,7 @@ jobs:
         run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
       - name: List build artifacts
-        run: ls -R target" # Use `dir` for Windows
+        run: ls -R target # Use `dir` for Windows
         shell: C:\cygwin\bin\bash.exe '{0}'
 
       - name: Start application
