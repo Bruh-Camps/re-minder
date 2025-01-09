@@ -124,7 +124,7 @@ jobs:
         run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
       - name: List build artifacts
-        run: ls -R target # Use `dir` for Windows
+        run: ls -R target
         shell: C:\cygwin\bin\bash.exe '{0}'
 
       - name: Start application
@@ -143,9 +143,9 @@ jobs:
       - name: Run Maven Tests
         run: mvn test
 
-      - name: List coverage reports
-        run: ls -R target/site/jacoco/
-        shell: C:\cygwin\bin\bash.exe '{0}'
+      #- name: List coverage reports
+      #  run: ls -R target/site/jacoco/
+      #  shell: C:\cygwin\bin\bash.exe '{0}'
 
       - name: Upload coverage manually
         run: |

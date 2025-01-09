@@ -8,8 +8,6 @@ import static org.hamcrest.Matchers.*;
 
 public class ReminderApiE2ETest {
 
-    static  String accessToken = null;
-
     // ------------------------------------- FIXTURES PARA OS TESTES
 
     @BeforeAll
@@ -40,7 +38,7 @@ public class ReminderApiE2ETest {
     public static void teardownClass() {
 
         //Faz signin antes de remover usuário para ser autorizado a isso
-        signInUser();
+        String accessToken = signInTestUser();
 
         if (accessToken != null) {
             given()
@@ -54,9 +52,9 @@ public class ReminderApiE2ETest {
         }
     }
 
-    public static void signInUser() {
+    public static String signInTestUser() {
         // Login do usuário
-        accessToken = given()
+        return given()
                 .contentType("application/json")
                 .body("""
                           {
@@ -73,16 +71,44 @@ public class ReminderApiE2ETest {
                 .path("accessToken");
     }
 
+    public static void signOutTestUser(String accessToken) {
+        // Logout do usuário
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType("application/json")
+                .body("""
+                          {
+                            "usernameOrEmail": "test",
+                            "password": "1234test"
+                          }
+                         """
+                )
+                .when()
+                .post("/user/signout")
+                .then()
+                .statusCode(200)
+                .body(equalTo("User signed out successfully"));
+    }
 
 
 
 
 
-    // ------------------------------------- TESTES DE SISTEMA
+
+    // ------------------------------------- TESTES DE SISTEMA -------------------------------------
+
 
     @Test
-    public void testCreateThenDeleteReminder() {
-        signInUser();
+    public void signInAndThenOutTest() {
+        String accessToken = signInTestUser();
+        assert accessToken != null;
+        signOutTestUser(accessToken);
+    }
+
+
+    @Test
+    public void testCreateThenGetReminder() {
+        String accessToken = signInTestUser();
 
         String item = """
                         {
@@ -104,6 +130,7 @@ public class ReminderApiE2ETest {
 
         given()
                 .header("Authorization", "Bearer " + accessToken)
+                .contentType("application/json")
                 .when()
                 .get("/user/items")
                 .then()
@@ -112,6 +139,10 @@ public class ReminderApiE2ETest {
                 .body("[0].name", equalTo("Escova de dentes"))
                 .body("[0].dateLastChange", equalTo("01/01/2024"))
                 .body("[0].changeDaysInterval", equalTo(90));
+
+        signOutTestUser(accessToken);
     }
+
+
 
 }
