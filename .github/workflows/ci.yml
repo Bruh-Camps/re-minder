@@ -127,7 +127,7 @@ jobs:
         shell: pwsh
         run: |
           Start-Job -ScriptBlock {
-              java -jar target/re-minder.jar -server.port=8080
+            Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar" 
           }
           
           $healthCheckUrl = "http://localhost:8080/api/auth/health"
