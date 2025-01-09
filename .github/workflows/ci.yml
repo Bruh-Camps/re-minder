@@ -141,9 +141,16 @@ jobs:
         shell: C:\cygwin\bin\bash.exe -o igncr '{0}'
 
       - name: Run Maven Tests
-        run: mvn test
+        run: mvn clean test
+
+      - name: List coverage reports
+        run: ls -R target/site
+        shell: C:\cygwin\bin\bash.exe '{0}'
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        with:
+          files: target/site/jacoco/jacoco.xml
+          verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
