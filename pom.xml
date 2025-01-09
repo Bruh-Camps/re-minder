@@ -112,7 +112,7 @@
     <build>
 
         <finalName>re-minder</finalName> <!-- The desired name of the JAR -->
-        <!--<directory>${project.basedir}/output</directory>  The desired location -->
+        <directory>${project.basedir}/target</directory>  <!-- The desired location -->
 
         <plugins>
             <!-- Plugin do Spring Boot para empacotamento e execução -->
@@ -132,8 +132,8 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
-                        <phase>test</phase>
+                        <id>default-report</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
