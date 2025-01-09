@@ -125,8 +125,9 @@ jobs:
 
       - name: Start application
         run: |
-          Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar"
-          $maxAttempts = 40
+          $process = Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar" -PassThru
+          Write-Host "Application started with PID: $($process.Id)"
+          $maxAttempts = 30
           $attempt = 0
           while ($attempt -lt $maxAttempts) {
             try {
