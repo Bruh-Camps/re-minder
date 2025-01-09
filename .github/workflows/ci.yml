@@ -56,11 +56,14 @@ jobs:
       - name: Debug Jacoco exec file
         run: ls -l target
 
-      - name: Merge Jacoco coverage
-        run: mvn jacoco:merge -Djacoco.destfile=target/jacoco-merged.exec -Djacoco.filesets=target/jacoco-it.exec -X
+      #- name: Merge Jacoco coverage
+      #  run: mvn jacoco:merge -Djacoco.destfile=target/jacoco-merged.exec -X
 
-      - name: Generate Jacoco report
-        run: mvn jacoco:report -Djacoco.dataFile=target/jacoco-merged.exec
+      #- name: Generate Jacoco report
+      #  run: mvn jacoco:report -Djacoco.dataFile=target/jacoco-merged.exec
+
+      - name: Generate Coverage Report
+        run: mvn verify
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
