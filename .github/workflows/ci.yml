@@ -101,7 +101,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Configure correct dealing of line endings (to use Cygwin)
-      - run: git config --global core.autocrlf input
+        run: git config --global core.autocrlf input
 
       - name: Checkout code
         uses: actions/checkout@v3
