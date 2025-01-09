@@ -141,7 +141,7 @@ jobs:
         shell: C:\cygwin\bin\bash.exe -o igncr '{0}'
 
       - name: Run Maven Tests
-        run: mvn clean test
+        run: mvn test
 
       - name: List coverage reports
         run: ls -R target/site
