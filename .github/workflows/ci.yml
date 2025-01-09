@@ -53,6 +53,9 @@ jobs:
       - name: Stop application
         run: pkill -f "re-minder.jar" || echo "Application already stopped"
 
+      #- name: Merge Jacoco coverage
+      #  run: mvn jacoco:merge -Djacoco.destfile=target/jacoco-merged.exec -X
+
       - name: Merge Jacoco coverage
         run: |
           mvn jacoco:merge \
