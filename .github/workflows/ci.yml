@@ -147,11 +147,8 @@ jobs:
         run: ls -R target/site/jacoco/
         shell: C:\cygwin\bin\bash.exe '{0}'
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          files: target/site/jacoco/jacoco.xml
-          verbose: true
-        shell: pwsh
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
+      - name: Upload coverage manually
+        run: |
+          curl -Os https://uploader.codecov.io/latest/windows/codecov.exe
+          ./codecov.exe -t ${{ secrets.CODECOV_ORG_TOKEN }} -f target/site/jacoco/jacoco.xml -v
+        shell: cmd
