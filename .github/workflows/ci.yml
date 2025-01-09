@@ -133,14 +133,14 @@ jobs:
       - name: Start application
         run: >-
           nohup java -jar target/re-minder.jar & 
-                    for i in {1..30}; do # Wait for up to 30 seconds
-                      if curl -s http://localhost:8080/api/auth/health; then
-                        echo "Application is running"
-                        break
-                      fi
-                      echo "Waiting for application to start..."
-                      sleep 1
-                    done
+            for i in {1..30}; do # Wait for up to 30 seconds
+              if curl -s http://localhost:8080/api/auth/health; then
+                echo "Application is running"
+                break
+              fi
+              echo "Waiting for application to start..."
+              sleep 1
+            done
         shell: C:\cygwin\bin\bash.exe '{0}'
 
       - name: Run Maven Tests
