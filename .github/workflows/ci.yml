@@ -141,7 +141,7 @@ jobs:
               echo "Waiting for application to start..."
               sleep 1
             done
-        shell: C:\cygwin\bin\bash.exe '{0}'
+        shell: C:\cygwin\bin\bash.exe -o igncr '{0}'
 
       - name: Run Maven Tests
         run: mvn test
