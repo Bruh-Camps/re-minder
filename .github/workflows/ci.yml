@@ -127,14 +127,17 @@ jobs:
         shell: pwsh
         run: |
           Start-Job -ScriptBlock {
-              java -jar target/re-minder.jar
+              java -jar target/re-minder.jar -server.port=8080
           }
+          
           $healthCheckUrl = "http://localhost:8080/api/auth/health"
+          $appStarted = $false
           for ($i = 0; $i -lt 30; $i++) {
             try {
               $response = Invoke-WebRequest -Uri $healthCheckUrl -UseBasicParsing -TimeoutSec 2
               if ($response.StatusCode -eq 200) {
-                Write-Host "Application is running"
+                Write-Host "Application is running in port 8080"
+                $appStarted = $true
                 break
               }
             } catch {
@@ -142,7 +145,7 @@ jobs:
             }
             Start-Sleep -Seconds 1
           }
-          if (-not $response -or $response.StatusCode -ne 200) {
+          if (-not $appStarted) {
             Write-Host "Application failed to start"
             exit 1
           }
