@@ -99,8 +99,6 @@ jobs:
 
   test-windows:
     runs-on: windows-latest
-
-    name: 'Test ${{ matrix.platform }}'
     steps:
       - name: Configure correct dealing of line endings (to use Cygwin)
       - run: git config --global core.autocrlf input
@@ -144,7 +142,6 @@ jobs:
                       sleep 1
                     done
         shell: C:\cygwin\bin\bash.exe '{0}'
-
 
       - name: Run Maven Tests
         run: mvn test
