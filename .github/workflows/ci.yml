@@ -126,7 +126,7 @@ jobs:
       - name: Start application
         shell: pwsh
         run: |
-          Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar"
+          Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar" -WindowStyle hidden
           $healthCheckUrl = "http://localhost:8080/api/auth/health"
           for ($i = 0; $i -lt 30; $i++) {
             try {
