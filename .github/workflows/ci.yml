@@ -124,28 +124,18 @@ jobs:
         run: dir target # Use `dir` command for Windows
 
       - name: Start application
-        run: |
-          $process = Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar target/re-minder.jar" -PassThru
-          Write-Host "Application started with PID: $($process.Id)"
-          $maxAttempts = 30
-          $attempt = 0
-          while ($attempt -lt $maxAttempts) {
-            try {
-              $response = Invoke-WebRequest -Uri "http://localhost:8080/api/auth/health" -UseBasicParsing
-              if ($response.StatusCode -eq 200) {
-                Write-Host "Application is running"
-                break
-              }
-            } catch {
-              Write-Host "Waiting for application to start..."
-            }
-            Start-Sleep -Seconds 1
-            $attempt++
-          }
-          if ($attempt -eq $maxAttempts) {
-            Write-Error "Application did not start within the expected time"
-            exit 1
-          }
+        shell: cmd
+        run: start /b java -jar target/re-minder.jar && (
+            for /l %i in (1,1,30) do (
+              curl -s http://localhost:8080/api/auth/health && (
+                echo Application is running
+                exit /b 0
+              )
+              echo Waiting for application to start...
+              timeout /t 1 > nul
+            )
+            exit /b 1
+          )"
 
       - name: Check application status
         run: |
