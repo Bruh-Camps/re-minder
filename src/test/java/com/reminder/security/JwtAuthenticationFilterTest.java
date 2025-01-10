@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +23,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JwtAuthenticationFilterTest {
 
+    @InjectMocks
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Mock
     private JwtTokenProvider jwtTokenProvider;
+
+    @Mock
+    private JwtTokenBlacklistService jwtTokenBlacklistService;
 
     @Mock
     private SecurityContextHolder securityContextHolder;
@@ -49,7 +54,7 @@ class JwtAuthenticationFilterTest {
     void setUp() {
         SecurityContextHolder.clearContext();
         MockitoAnnotations.openMocks(this);
-        jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService, new JwtTokenBlacklistService());
+        jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService, jwtTokenBlacklistService);
     }
 
     @AfterEach
@@ -57,25 +62,34 @@ class JwtAuthenticationFilterTest {
         SecurityContextHolder.clearContext();
     }
 
-    /*@Test
+    @Test
     void testDoFilterInternalWithValidToken() throws ServletException, IOException {
         String validToken = "validToken";
         String username = "testUser";
 
+        // Mock das dependências do filtro
         when(request.getHeader("Authorization")).thenReturn("Bearer " + validToken);
         when(jwtTokenProvider.validateToken(validToken)).thenReturn(true);
         when(jwtTokenProvider.getUsernameFromToken(validToken)).thenReturn(username);
         when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
+        when(jwtTokenBlacklistService.isTokenInMap(anyString(), anyString())).thenReturn(true);
 
+        // Configuração inicial do SecurityContext
+        SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+
+        // Executa o filtro
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
 
+        // Verifica o resultado no SecurityContext
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
+        // Asserções para garantir que o filtro funcionou corretamente
         assertNotNull(authentication);
         assertEquals(userDetails, authentication.getPrincipal());
         verify(filterChain).doFilter(request, response);
-    }*/
+
+    }
 
     @Test
     void testDoFilterInternalWithInvalidToken() throws ServletException, IOException {
