@@ -27,12 +27,12 @@ public class JwtTokenBlacklistService {
         return userTokensMap.getOrDefault(username, Collections.emptyList());
     }
 
-    public void clearUserTokens(String username) {
-        List<String> tokens = userTokensMap.remove(username);
-        if (tokens != null) {
-            blacklistedTokens.addAll(tokens);
-        }
-    }
+    //public void clearUserTokens(String username) {
+    //    List<String> tokens = userTokensMap.remove(username);
+    //    if (tokens != null) {
+    //        blacklistedTokens.addAll(tokens);
+    //    }
+    //}
 
     public boolean isTokenInMap(String username, String token) {
         List<String> tokens = userTokensMap.get(username);

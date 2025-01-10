@@ -22,7 +22,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Access Denied");
-        errorResponse.put("message", "Você não está autorizado a acessar este recurso.");
+        errorResponse.put("message", "You are not authorized to access this resource.");
 
         response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(errorResponse));
     }

@@ -42,7 +42,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("health")
+    @GetMapping("/health")
     public ResponseEntity<?> health(){
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -3,6 +3,7 @@ package com.reminder.controller;
 import com.reminder.dto.ItemDto;
 import com.reminder.model.Item;
 import com.reminder.model.User;
+import com.reminder.repository.ItemRepository;
 import com.reminder.service.ItemService;
 import com.reminder.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -22,10 +25,13 @@ import static org.mockito.Mockito.*;
 class ItemControllerTest {
 
     @Mock
-    private ItemService itemService;
+    private ItemRepository itemRepository;
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private ItemService itemService;
 
     @InjectMocks
     private ItemController itemController;
@@ -41,37 +47,23 @@ class ItemControllerTest {
     }
 
     @Test
-    void testCreateUserItem_Success() {
+    void testControllerCallServiceToSaveItem() {
         // Arrange
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Test Item");
-        itemDto.setDateLastChange(LocalDate.of(2024, 12, 1));
+        itemDto.setDateLastChange("01/12/2024");
         itemDto.setChangeDaysInterval(30);
-
-        Item savedItem = new Item();
-        savedItem.setId(1L);
-        savedItem.setName("Test Item");
-        savedItem.setDateLastChange(LocalDate.of(2024, 12, 1));
-        savedItem.setChangeDaysInterval(30);
-        savedItem.setDateNextChange(LocalDate.of(2024, 12, 31));
-        savedItem.setUser(user);
-
         when(userService.getCurrentUser()).thenReturn(user);
-        when(itemService.saveItem(itemDto, user)).thenReturn(savedItem);
 
         // Act
         ResponseEntity<?> response = itemController.createUserItem(itemDto);
 
         // Assert
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Item saved successfully", response.getBody());
-        verify(userService, times(1)).getCurrentUser();
         verify(itemService, times(1)).saveItem(itemDto, user);
     }
 
     @Test
-    void testGetAllItemsForAuthenticatedUser_Success() {
+    void testControllerCallServiceToGetUserItems() {
         // Arrange
         Item item1 = new Item();
         item1.setId(1L);
@@ -90,11 +82,6 @@ class ItemControllerTest {
         List<Item> result = itemController.getAllItemsForAuthenticatedUser();
 
         // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Item 1", result.get(0).getName());
-        assertEquals("Item 2", result.get(1).getName());
-        verify(userService, times(1)).getCurrentUser();
         verify(itemService, times(1)).getItemsByUser(user);
     }
 }

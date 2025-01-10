@@ -1,7 +1,7 @@
 package com.reminder.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -11,8 +11,8 @@ public class ItemDto {
     private String name;
 
     @NotNull(message = "Date of last change is required")
-    @JsonFormat(pattern = "dd/MM/yyyy") // Formato desejado para a entrada/saída de datas
-    private LocalDate dateLastChange;
+    @Pattern(regexp = "\\d{2}/\\d{2}/\\d{4}", message = "Date must be in the format dd/MM/yyyy.")
+    private String dateLastChange;
 
     @NotNull(message = "Change days interval is required")
     private Integer changeDaysInterval;
@@ -25,11 +25,11 @@ public class ItemDto {
         this.name = name;
     }
 
-    public LocalDate getDateLastChange() {
+    public String getDateLastChange() {
         return dateLastChange;
     }
 
-    public void setDateLastChange(LocalDate dateLastChange) {
+    public void setDateLastChange(String dateLastChange) {
         this.dateLastChange = dateLastChange;
     }
 

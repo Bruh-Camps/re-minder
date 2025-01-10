@@ -12,18 +12,18 @@ class ItemDtoTest {
     void testGettersAndSetters() {
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Test Item");
-        itemDto.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto.setDateLastChange("14/12/2023");
         itemDto.setChangeDaysInterval(30);
 
         assertEquals("Test Item", itemDto.getName());
-        assertEquals(LocalDate.of(2023, 12, 14), itemDto.getDateLastChange());
+        assertEquals("14/12/2023", itemDto.getDateLastChange());
         assertEquals(30, itemDto.getChangeDaysInterval());
     }
 
     @Test
     void testNameNullValidation() {
         ItemDto itemDto = new ItemDto();
-        itemDto.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto.setDateLastChange("14/12/2023");
         itemDto.setChangeDaysInterval(30);
 
         assertNull(itemDto.getName());
@@ -42,7 +42,7 @@ class ItemDtoTest {
     void testChangeDaysIntervalNullValidation() {
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Test Item");
-        itemDto.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto.setDateLastChange("14/12/2023");
 
         assertNull(itemDto.getChangeDaysInterval());
     }
@@ -51,7 +51,7 @@ class ItemDtoTest {
     void testEqualsSameObject() {
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Test Item");
-        itemDto.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto.setDateLastChange("14/12/2023");
         itemDto.setChangeDaysInterval(30);
 
         assertEquals(itemDto, itemDto);
@@ -61,12 +61,12 @@ class ItemDtoTest {
     void testEqualsDifferentObjects() {
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setName("Test Item");
-        itemDto1.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto1.setDateLastChange("14/12/2023");
         itemDto1.setChangeDaysInterval(30);
 
         ItemDto itemDto2 = new ItemDto();
         itemDto2.setName("Test Item");
-        itemDto2.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto2.setDateLastChange("14/12/2023");
         itemDto2.setChangeDaysInterval(30);
 
         assertEquals(itemDto1, itemDto2);
@@ -76,12 +76,12 @@ class ItemDtoTest {
     void testEqualsNotTrue() {
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setName("Test Item");
-        itemDto1.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto1.setDateLastChange("14/12/2023");
         itemDto1.setChangeDaysInterval(30);
 
         ItemDto itemDto2 = new ItemDto();
         itemDto2.setName("Test different Item");
-        itemDto2.setDateLastChange(LocalDate.of(2024, 12, 14));
+        itemDto2.setDateLastChange("14/12/2023");
         itemDto2.setChangeDaysInterval(20);
 
         assertNotEquals(itemDto1, itemDto2);
@@ -91,12 +91,12 @@ class ItemDtoTest {
     void testHashCode() {
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setName("Test Item");
-        itemDto1.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto1.setDateLastChange("14/12/2023");
         itemDto1.setChangeDaysInterval(30);
 
         ItemDto itemDto2 = new ItemDto();
         itemDto2.setName("Test Item");
-        itemDto2.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto2.setDateLastChange("14/12/2023");
         itemDto2.setChangeDaysInterval(30);
 
         assertEquals(itemDto1.hashCode(), itemDto2.hashCode());
@@ -106,12 +106,12 @@ class ItemDtoTest {
     void testNotEqualsDifferentValues() {
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setName("Item A");
-        itemDto1.setDateLastChange(LocalDate.of(2023, 12, 14));
+        itemDto1.setDateLastChange("14/12/2023");
         itemDto1.setChangeDaysInterval(30);
 
         ItemDto itemDto2 = new ItemDto();
         itemDto2.setName("Item B");
-        itemDto2.setDateLastChange(LocalDate.of(2024, 1, 1));
+        itemDto2.setDateLastChange("01/01/2024");
         itemDto2.setChangeDaysInterval(15);
 
         assertNotEquals(itemDto1, itemDto2);

@@ -9,10 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,42 +40,50 @@ class ItemServiceTest {
     @Test
     void testSaveItem_Success() {
         // Arrange
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Test Item");
-        itemDto.setDateLastChange(LocalDate.of(2024, 12, 1));
+        itemDto.setDateLastChange("01/12/2024");
         itemDto.setChangeDaysInterval(30);
 
         Item savedItem = new Item();
         savedItem.setId(1L);
         savedItem.setName("Test Item");
-        savedItem.setDateLastChange(LocalDate.of(2024, 12, 1));
+        savedItem.setDateLastChange(LocalDate.parse("01/12/2024", formatter));
         savedItem.setChangeDaysInterval(30);
-        savedItem.setDateNextChange(LocalDate.of(2024, 12, 31));
+        savedItem.setDateNextChange(LocalDate.parse("31/12/2024", formatter));
         savedItem.setUser(user);
 
         when(itemRepository.save(any(Item.class))).thenReturn(savedItem);
 
         // Act
-        Item result = itemService.saveItem(itemDto, user);
+        ResponseEntity<?> response = itemService.saveItem(itemDto, user);
 
         // Assert
-        assertNotNull(result);
-        assertEquals("Test Item", result.getName());
-        assertEquals(LocalDate.of(2024, 12, 31), result.getDateNextChange());
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(itemRepository).save(argThat(item -> Objects.equals(item.getName(), "Test Item")));
+        verify(itemRepository).save(argThat(item -> Objects.equals(item.getDateLastChange(), LocalDate.parse("01/12/2024", formatter))));
+        verify(itemRepository).save(argThat(item -> Objects.equals(item.getDateNextChange(), LocalDate.parse("31/12/2024", formatter))));
         verify(itemRepository, times(1)).save(any(Item.class));
     }
 
     @Test
-    void testSaveItem_MissingFields_ShouldThrowException() {
+    void testTrySavingItemsWithMissingFields() {
         // Arrange
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Invalid Item");
+        Map<String, String> expectedErrorResponse = new HashMap<>();
+        expectedErrorResponse.put("error", "Missing required fields");
+        expectedErrorResponse.put("message", "Fields name, dateLastChange and changeDaysInterval are required.");
 
-        // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            itemService.saveItem(itemDto, user);
-        });
-        assertEquals("dateLastChange and changeDaysInterval are required", exception.getMessage());
+        // Act
+        ResponseEntity<?> response = itemService.saveItem(itemDto, user);
+
+        //Assert
+        assertEquals(400, response.getStatusCode().value());
+        assertEquals(expectedErrorResponse, response.getBody());
         verify(itemRepository, never()).save(any(Item.class));
     }
 

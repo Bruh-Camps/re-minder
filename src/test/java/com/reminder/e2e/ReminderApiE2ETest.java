@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 import static io.restassured.RestAssured.given;
@@ -62,8 +63,24 @@ public class ReminderApiE2ETest {
         }
     }
 
-    public static String signInTestUser() {
-        // Login do usuário
+    public static String signInTestUser(String username, String password) {
+        return given()
+                .contentType("application/json")
+                .body("""
+                          {
+                            "usernameOrEmail": "%s",
+                            "password": "%s"
+                          }
+                         """.formatted(username, password)
+                )
+                .when()
+                .post("/auth/signin")
+                .then()
+                .statusCode(200)
+                .extract()
+                .path("accessToken");
+    }
+    private static String signInTestUser() {
         return given()
                 .contentType("application/json")
                 .body("""
@@ -306,7 +323,51 @@ public class ReminderApiE2ETest {
     }
 
     @Test
-    public void testTryCreatingReminderWithInvalidData() {
+    public void testTryCreatingReminderWithWrongDateFormat() {
+        String accessToken = signInTestUser();
+
+        String itemWhithInvalidDate = """
+                        {
+                            "name": "Escova de dentes",
+                            "dateLastChange": "40/13/2024",
+                            "changeDaysInterval": 90
+                          }
+                      """;
+
+        String itemWhithInvalidDateFormat = """
+                        {
+                            "name": "Escova de dentes",
+                            "dateLastChange": "10-10-2024",
+                            "changeDaysInterval": 90
+                          }
+                      """;
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType("application/json")
+                .body(itemWhithInvalidDate)
+                .when()
+                .post("user/item")
+                .then()
+                .statusCode(400)
+                .body("error", equalTo("Invalid Date"))
+                .body("message", equalTo("Date must be in the format dd/MM/yyyy and valid."));
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType("application/json")
+                .body(itemWhithInvalidDateFormat)
+                .when()
+                .post("user/item")
+                .then()
+                .statusCode(400)
+                .body("dateLastChange", equalTo("Date must be in the format dd/MM/yyyy."));
+
+        signOutTestUser(accessToken);
+    }
+
+    @Test
+    public void testTryCreatingReminderWithMissingData() {
         String accessToken = signInTestUser();
 
         String invalidItemNoName = """
@@ -428,6 +489,105 @@ public class ReminderApiE2ETest {
                 .statusCode(401)
                 .body("error", equalTo("Unauthorized"))
                 .body("message", equalTo("User is not authenticated. Please log in to access this resource."));
+    }
+
+    @Test
+    public void testTryToDeleteUserWithInvalidUsername() {
+        String accessToken = signInTestUser();
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType("application/json")
+                .when()
+                .delete("user/remove/" + "invalidUsername")
+                .then()
+                .statusCode(404)
+                .body(equalTo("User not found!"));
+    }
+
+    @Test
+    public void testTryToAccessAdminEndpointWithNormalUser(){
+        String accessToken = signInTestUser();
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType("application/json")
+                .when()
+                .get("/admin/info")
+                .then()
+                .statusCode(403)
+                .body("error", equalTo("Access Denied"))
+                .body("message", equalTo("You are not authorized to access this resource."));
+    }
+
+    @Test
+    public void testTryToCreateUserWithDuplicateUsername() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToCreateUserWithDuplicateMail() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToCreateUserWithInvalidData() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToDeleteAnotherUserBeingAdmin() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToDeleteAnotherUserNotBeingAdmin() {
+        // Cria um segundo usuário
+        given()
+                .contentType("application/json")
+                .body("""
+                      {
+                          "name": "anotherTestUserName",
+                          "username": "anotherTestUserName",
+                          "email": "anotherTestMail@example.com",
+                          "password": "1234test"
+                      }
+                    """
+                )
+                .when()
+                .post("/auth/signup")
+                .then()
+                .statusCode(200)
+                .body(equalTo("User registered successfully"));
+
+        // Faz login com o primeiro usuário
+        String accessToken = signInTestUser();
+
+        // Tenta remover o segundo usuário (estando logado com o primeiro)
+        if (accessToken != null) {
+            given()
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType("application/json")
+                    .when()
+                    .delete("/user/remove/" + "anotherTestUserName")
+                    .then()
+                    .statusCode(403)
+                    .body(equalTo("You are not authorized to remove this user!"));
+        }
+
+        // Remove o segundo usuário após o teste ser completo
+        String accessTokenAnotherUser = signInTestUser("anotherTestUserName", "1234test");
+        if (accessToken != null) {
+            given()
+                    .header("Authorization", "Bearer " + accessTokenAnotherUser)
+                    .contentType("application/json")
+                    .when()
+                    .delete("/user/remove/" + "anotherTestUserName")
+                    .then()
+                    .statusCode(200)
+                    .body(equalTo("User removed successfully"));
+        }
+
+
+
     }
 
 }

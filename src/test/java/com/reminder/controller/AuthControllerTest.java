@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -91,6 +92,7 @@ class AuthControllerTest {
         when(userRepository.existsByUsername(signUpDto.getUsername())).thenReturn(false);
         when(userRepository.existsByEmail(signUpDto.getEmail())).thenReturn(false);
         when(roleRepository.findByName("NORMAL_USER")).thenReturn(Optional.of(role));
+        when(roleRepository.existsByName("NORMAL_USER")).thenReturn(true);
         when(passwordEncoder.encode(signUpDto.getPassword())).thenReturn("encoded-password");
 
         // Act
@@ -98,6 +100,8 @@ class AuthControllerTest {
 
         // Assert
         assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User registered successfully", response.getBody());
     }
 
     @Test
@@ -152,5 +156,14 @@ class AuthControllerTest {
         assertNotNull(response);
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("User role not found!", response.getBody());
+    }
+
+    @Test
+    void testGetHealthOfApplication(){
+        ResponseEntity<?> response = authController.health();
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
