@@ -4,12 +4,17 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
-
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext
 public class ReminderApiE2ETest {
 
     // ------------------------------------- FIXTURES PARA OS TESTES
@@ -18,6 +23,7 @@ public class ReminderApiE2ETest {
     public static void setupClass() {
 
         RestAssured.baseURI = "http://localhost:8080/api";
+        RestAssured.port = 8080;
 
         // Criação de usuário para os testes e2e
         given()

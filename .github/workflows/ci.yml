@@ -25,29 +25,34 @@ jobs:
           restore-keys: |
             ubuntu-maven-
 
-      - name: Build application
-        run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
+      #- name: Build application
+      #  run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
-      - name: List build artifacts
-        run: ls -R target
+      #- name: List build artifacts
+      #  run: ls -R target
 
-      - name: Start application
-        run: |
-          nohup java -jar target/re-minder.jar & 
-          for i in {1..30}; do # Wait for up to 30 seconds
-            if curl -s http://localhost:8080/api/auth/health; then
-              echo "Application is running"
-              break
-            fi
-            echo "Waiting for application to start..."
-            sleep 1
-          done
+      #- name: Start application
+      #  run: |
+      #    nohup java -jar target/re-minder.jar &
+      #    for i in {1..30}; do # Wait for up to 30 seconds
+      #      if curl -s http://localhost:8080/api/auth/health; then
+      #        echo "Application is running"
+      #        break
+      #      fi
+      #      echo "Waiting for application to start..."
+      #      sleep 1
+      #    done
 
       - name: Run Maven Tests
         run: mvn clean test
 
+        #- name: List coverage reports
+        #  run: ls -R target/site/jacoco/
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        with:
+          file: target/site/jacoco/jacoco.xml
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
 
@@ -71,34 +76,33 @@ jobs:
           restore-keys: |
             macos-maven-
 
-      - name: Build application
-        run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
+      #- name: Build application
+      #  run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
-      - name: List build artifacts
-        run: ls -R target
+      #- name: List build artifacts
+      #  run: ls -R target
 
-      - name: Start application
-        run: |
-          nohup java -jar target/re-minder.jar & 
-          for i in {1..30}; do # Wait for up to 30 seconds
-            if curl -s http://localhost:8080/api/auth/health; then
-              echo "Application is running"
-              break
-            fi
-            echo "Waiting for application to start..."
-            sleep 1
-          done
+      #- name: Start application
+      #  run: |
+      #    nohup java -jar target/re-minder.jar &
+      #    for i in {1..30}; do # Wait for up to 30 seconds
+      #      if curl -s http://localhost:8080/api/auth/health; then
+      #        echo "Application is running"
+      #        break
+      #      fi
+      #      echo "Waiting for application to start..."
+      #      sleep 1
+      #    done
 
       - name: Run Maven Tests
         run: mvn clean test
 
-      - name: List coverage reports
-        run: ls -R target/site/jacoco/
+      #- name: List coverage reports
+      #  run: ls -R target/site/jacoco/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          verbose: true
           file: target/site/jacoco/jacoco.xml
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
@@ -123,31 +127,31 @@ jobs:
           restore-keys: |
             windows-maven-
 
-      - name: Install Cygwin Action
-        uses: cygwin/cygwin-install-action@v5
+      #- name: Install Cygwin Action
+      #  uses: cygwin/cygwin-install-action@v5
 
-      - name: Build application
-        run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
+      #- name: Build application
+      #  run: mvn clean package -DskipTests -DfinalName=re-minder -DoutputDirectory=target/
 
-      - name: List build artifacts
-        run: ls -R target
-        shell: C:\cygwin\bin\bash.exe '{0}'
+      #- name: List build artifacts
+      #  run: ls -R target
+      #  shell: C:\cygwin\bin\bash.exe '{0}'
 
-      - name: Start application
-        run: >-
-          nohup java -jar target/re-minder.jar & 
-            for i in {1..30}; do # Wait for up to 30 seconds
-              if curl -s http://localhost:8080/api/auth/health; then
-                echo "Application is running"
-                break
-              fi
-              echo "Waiting for application to start..."
-              sleep 1
-            done
-        shell: C:\cygwin\bin\bash.exe -o igncr '{0}'
+      #- name: Start application
+      #  run: >-
+      #    nohup java -jar target/re-minder.jar &
+      #      for i in {1..30}; do # Wait for up to 30 seconds
+      #        if curl -s http://localhost:8080/api/auth/health; then
+      #          echo "Application is running"
+      #          break
+      #        fi
+      #        echo "Waiting for application to start..."
+      #        sleep 1
+      #      done
+      #  shell: C:\cygwin\bin\bash.exe -o igncr '{0}'
 
       - name: Run Maven Tests
-        run: mvn test
+        run: mvn clean test
 
       #- name: List coverage reports
       #  run: ls -R target/site/jacoco/
