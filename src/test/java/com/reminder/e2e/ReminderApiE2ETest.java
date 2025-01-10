@@ -519,26 +519,6 @@ public class ReminderApiE2ETest {
     }
 
     @Test
-    public void testTryToCreateUserWithDuplicateUsername() {
-        // TODO
-    }
-
-    @Test
-    public void testTryToCreateUserWithDuplicateMail() {
-        // TODO
-    }
-
-    @Test
-    public void testTryToCreateUserWithInvalidData() {
-        // TODO
-    }
-
-    @Test
-    public void testTryToDeleteAnotherUserBeingAdmin() {
-        // TODO
-    }
-
-    @Test
     public void testTryToDeleteAnotherUserNotBeingAdmin() {
         // Cria um segundo usuário
         given()
@@ -588,6 +568,27 @@ public class ReminderApiE2ETest {
 
 
 
+    }
+
+
+    @Test
+    public void testTryToCreateUserWithDuplicateUsername() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToCreateUserWithDuplicateMail() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToCreateUserWithInvalidData() {
+        // TODO
+    }
+
+    @Test
+    public void testTryToDeleteAnotherUserBeingAdmin() {
+        // TODO
     }
 
 }
