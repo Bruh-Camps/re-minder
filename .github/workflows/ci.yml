@@ -92,8 +92,14 @@ jobs:
       - name: Run Maven Tests
         run: mvn clean test
 
+      - name: List coverage reports
+        run: ls -R target/site/jacoco/
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        with:
+          verbose: true
+          file: target/site/jacoco/jacoco.xml
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
 
